@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private TMP_Text bombCounterText;
 
     // BOMB REFERENCES
     [SerializeField] private GameObject bombPrefab;
@@ -38,11 +40,20 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float airControl = 0.3f;
 
+    // BOMB INVENTORY
+    [Range(1, 10)]
+    [SerializeField] private int maxBombs = 3;
+
+    private int currentBombs;
+
     // SETUP
 
     private void Awake()
     {
+        UpdateBombUI();
         rb = GetComponent<Rigidbody2D>();
+
+        currentBombs = maxBombs;
     }
 
     private void OnEnable()
@@ -147,12 +158,17 @@ public class PlayerController : MonoBehaviour
 
     private void PlaceBomb()
     {
+        if (currentBombs <= 0)
+        {
+            return;
+        }
+
         Instantiate(bombPrefab, bombSpawnPoint.position, Quaternion.identity);
+
+        currentBombs--;
+
+        UpdateBombUI();
     }
-
-
-
-
 
     // GIZMOS AND DEBUGS
 
@@ -163,5 +179,12 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.green;
 
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
+
+    // USER INTERFACE
+
+    private void UpdateBombUI()
+    {
+        bombCounterText.text = "BOMBS: " + currentBombs;
     }
 }
