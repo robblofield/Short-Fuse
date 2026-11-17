@@ -187,4 +187,12 @@ public class PlayerController : MonoBehaviour
     {
         bombCounterText.text = "BOMBS: " + currentBombs;
     }
+
+    public void RefillBombs()
+    {
+        currentBombs = maxBombs;
+
+        UpdateBombUI();
+    }
+
 }
