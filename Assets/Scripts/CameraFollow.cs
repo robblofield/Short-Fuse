@@ -20,6 +20,11 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (screenManager.IsTransitioning)
+        {
+            return;
+        }
+
         Vector2 currentPosition = transform.position;
         Vector2 targetPosition = target.position;
 
@@ -66,5 +71,12 @@ public class CameraFollow : MonoBehaviour
 
 
             return position;
+    }
+
+
+    public void SetCameraPosition(Vector2 position)
+    {
+        transform.position = new Vector3(position.x, position.y, transform.position.z);
+        followVelocity = Vector2.zero;
     }
 }
